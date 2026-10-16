@@ -1,0 +1,1106 @@
+﻿/* ================================================
+   Life Dashboard — style.css
+   Font: Poppins (Google Fonts)
+   ================================================ */
+
+/* ---------- CSS Variables (Light Theme) ---------- */
+:root {
+  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --card-bg: #ffffff;
+  --card-shadow: 0 8px 32px rgba(102, 126, 234, 0.18);
+  --card-shadow-hover: 0 12px 40px rgba(102, 126, 234, 0.28);
+  --text-primary: #2d2d4e;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --border-color: #e5e7eb;
+  --input-bg: #f9fafb;
+  --input-border: #d1d5db;
+  --input-focus-border: #667eea;
+
+  /* Accent colours */
+  --btn-primary: #667eea;
+  --btn-primary-hover: #5a6fd6;
+  --btn-start: #10b981;
+  --btn-start-hover: #059669;
+  --btn-stop: #f59e0b;
+  --btn-stop-hover: #d97706;
+  --btn-reset: #6b7280;
+  --btn-reset-hover: #4b5563;
+  --btn-danger: #ef4444;
+  --btn-danger-hover: #dc2626;
+  --btn-edit: #8b5cf6;
+  --btn-edit-hover: #7c3aed;
+
+  --clock-color: #667eea;
+  --timer-color: #667eea;
+  --timer-running-color: #10b981;
+  --task-done-color: #9ca3af;
+
+  --modal-overlay-bg: rgba(45, 45, 78, 0.6);
+  --modal-bg: #ffffff;
+
+  --badge-bg: #ede9fe;
+  --badge-color: #7c3aed;
+
+  --transition: 0.2s ease;
+  --radius-card: 20px;
+  --radius-btn: 10px;
+  --radius-input: 10px;
+}
+
+/* ---------- Dark Theme ---------- */
+body.dark {
+  --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  --card-bg: #1e2139;
+  --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --card-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.55);
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: #2d3748;
+  --input-bg: #2d3748;
+  --input-border: #4a5568;
+  --input-focus-border: #818cf8;
+
+  --btn-primary: #818cf8;
+  --btn-primary-hover: #6366f1;
+  --btn-start: #34d399;
+  --btn-start-hover: #10b981;
+  --btn-stop: #fbbf24;
+  --btn-stop-hover: #f59e0b;
+  --clock-color: #a5b4fc;
+  --timer-color: #a5b4fc;
+  --timer-running-color: #34d399;
+
+  --modal-overlay-bg: rgba(0, 0, 0, 0.75);
+  --modal-bg: #1e2139;
+
+  --badge-bg: #312e81;
+  --badge-color: #c4b5fd;
+}
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  color: var(--text-primary);
+  transition: background var(--transition), color var(--transition);
+}
+
+/* ---------- Theme Toggle Button ---------- */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: var(--card-bg);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  box-shadow: var(--card-shadow);
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1) rotate(15deg);
+  box-shadow: var(--card-shadow-hover);
+}
+
+/* ---------- Dashboard Layout ---------- */
+.dashboard {
+  max-width: 1256px;
+  margin: 0 auto;
+  /* env() adds safe-area padding for notched phones; falls back to 0px */
+  padding: 32px
+    max(20px, env(safe-area-inset-right))
+    max(40px, env(safe-area-inset-bottom))
+    max(20px, env(safe-area-inset-left));
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---------- Card Base ---------- */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius-card);
+  padding: 28px 30px;
+  box-shadow: var(--card-shadow);
+  transition: box-shadow var(--transition), background var(--transition), transform 0.15s ease;
+}
+
+.card:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+/* ---------- Card Title ---------- */
+.card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-icon {
+  font-size: 1.1rem;
+}
+
+/* ---------- Greeting Card ---------- */
+.greeting-card {
+  text-align: center;
+  padding: 36px 30px;
+  position: relative;
+}
+
+.time-display {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--clock-color);
+  letter-spacing: 2px;
+  line-height: 1.1;
+  transition: color var(--transition);
+}
+
+.date-display {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  font-weight: 400;
+}
+
+.greeting-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 10px;
+}
+
+.change-name-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-top: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color var(--transition), background var(--transition);
+}
+
+.change-name-btn:hover {
+  color: var(--btn-primary);
+  background: var(--badge-bg);
+}
+
+/* ---------- first Row ---------- */
+.first-row {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 20px;
+}
+
+/* ---------- Middle Row ---------- */
+.middle-row {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 20px;
+}
+
+/* ---------- Timer Card ---------- */
+.timer-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timer-duration-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.duration-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.duration-btn {
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background var(--transition), border-color var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.duration-btn:hover {
+  background: var(--btn-primary);
+  border-color: var(--btn-primary);
+  color: #fff;
+}
+
+.duration-input {
+  width: 52px;
+  text-align: center;
+  border: 1.5px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 4px 4px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  outline: none;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.duration-input:focus {
+  border-color: var(--input-focus-border);
+}
+
+/* hide number arrows */
+.duration-input::-webkit-inner-spin-button,
+.duration-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+.duration-input[type=number] { -moz-appearance: textfield; }
+
+.timer-display {
+  font-size: 3.8rem;
+  font-weight: 700;
+  color: var(--timer-color);
+  letter-spacing: 3px;
+  margin: 4px 0 8px;
+  transition: color 0.4s ease;
+}
+
+.timer-display.running {
+  color: var(--timer-running-color);
+}
+
+.timer-display.finished {
+  animation: timerPulse 0.6s ease-in-out 3;
+}
+
+@keyframes timerPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); color: #ef4444; }
+}
+
+.timer-status {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  font-weight: 500;
+  min-height: 1.2em;
+}
+
+.timer-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ---------- Tasks Card ---------- */
+.tasks-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.task-counter {
+  margin-left: auto;
+  background: var(--badge-bg);
+  color: var(--badge-color);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+.task-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.task-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1.5px solid var(--input-border);
+  border-radius: var(--radius-input);
+  font-family: inherit;
+  font-size: 0.88rem;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.task-input:focus {
+  border-color: var(--input-focus-border);
+  background: var(--card-bg);
+}
+
+.task-error, .link-error {
+  font-size: 0.78rem;
+  color: var(--btn-danger);
+  min-height: 1.2em;
+  margin-bottom: 4px;
+  font-weight: 500;
+  padding-left: 2px;
+  transition: opacity var(--transition);
+}
+
+.task-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+/* Scrollbar styling */
+.task-list::-webkit-scrollbar { width: 4px; }
+.task-list::-webkit-scrollbar-track { background: transparent; }
+.task-list::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--input-bg);
+  transition: border-color var(--transition), background var(--transition), transform 0.15s ease;
+  animation: slideIn 0.2s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.task-item:hover {
+  border-color: var(--input-focus-border);
+  transform: translateX(2px);
+}
+
+.task-item.completed {
+  background: var(--card-bg);
+  opacity: 0.7;
+}
+
+.task-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--btn-start);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.task-text {
+  flex: 1;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  word-break: break-word;
+  transition: color var(--transition);
+}
+
+.task-item.completed .task-text {
+  text-decoration: line-through;
+  color: var(--task-done-color);
+}
+
+.task-edit-input {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1.5px solid var(--input-focus-border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  background: var(--card-bg);
+  color: var(--text-primary);
+  outline: none;
+}
+
+.task-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.task-empty, .links-empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 20px 0 8px;
+}
+
+/* ---------- Bottom Row ---------- */
+.bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* ---------- Quick Links Card ---------- */
+.links-card {
+  /* left column in bottom row */
+}
+
+.link-input-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.link-input {
+  flex: 1;
+  min-width: 90px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--input-border);
+  border-radius: var(--radius-input);
+  font-family: inherit;
+  font-size: 0.85rem;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.link-input:focus {
+  border-color: var(--input-focus-border);
+  background: var(--card-bg);
+}
+
+.link-input-url {
+  flex: 2;
+  min-width: 140px;
+}
+
+.links-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: var(--btn-primary);
+  color: #fff;
+  border-radius: 50px;
+  font-size: 0.83rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: background var(--transition), transform 0.15s ease, box-shadow var(--transition);
+  animation: popIn 0.2s ease;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.link-pill:hover {
+  background: var(--btn-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(102, 126, 234, 0.35);
+}
+
+.link-delete-btn {
+  background: rgba(255, 255, 255, 0.25);
+  border: none;
+  color: #fff;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background var(--transition);
+  flex-shrink: 0;
+}
+
+.link-delete-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* ---------- Daily Progress Card ---------- */
+.progress-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* Big percentage + fraction row */
+.progress-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.progress-percent {
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--btn-primary);
+  line-height: 1;
+  transition: color 0.4s ease;
+}
+
+/* colour shifts as progress increases */
+.progress-percent.p-done   { color: var(--btn-start); }   /* 100% */
+.progress-percent.p-high   { color: #22c55e; }             /* ≥ 75% */
+.progress-percent.p-mid    { color: var(--btn-stop); }     /* ≥ 40% */
+
+.progress-fraction {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Progress bar track */
+.progress-bar-track {
+  width: 100%;
+  height: 12px;
+  background: var(--border-color);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+/* Animated fill */
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--btn-primary) 0%, #a78bfa 100%);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s ease;
+}
+
+/* colour shifts on the bar too */
+.progress-bar-fill.p-done { background: linear-gradient(90deg, var(--btn-start) 0%, #6ee7b7 100%); }
+.progress-bar-fill.p-high { background: linear-gradient(90deg, #16a34a 0%, #4ade80 100%); }
+.progress-bar-fill.p-mid  { background: linear-gradient(90deg, var(--btn-stop) 0%, #fde68a 100%); }
+
+/* Motivational text */
+.progress-label {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-align: center;
+  min-height: 1.2em;
+  transition: color var(--transition);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  padding: 9px 18px;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), transform 0.12s ease, opacity var(--transition);
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary {
+  background: var(--btn-primary);
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--btn-primary-hover);
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.btn-start {
+  background: var(--btn-start);
+  color: #fff;
+}
+.btn-start:hover:not(:disabled) {
+  background: var(--btn-start-hover);
+}
+
+.btn-stop {
+  background: var(--btn-stop);
+  color: #fff;
+}
+.btn-stop:hover:not(:disabled) {
+  background: var(--btn-stop-hover);
+}
+
+.btn-reset {
+  background: var(--btn-reset);
+  color: #fff;
+}
+.btn-reset:hover:not(:disabled) {
+  background: var(--btn-reset-hover);
+}
+
+.btn-danger {
+  background: var(--btn-danger);
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+}
+.btn-danger:hover:not(:disabled) {
+  background: var(--btn-danger-hover);
+}
+
+.btn-edit {
+  background: var(--btn-edit);
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+}
+.btn-edit:hover:not(:disabled) {
+  background: var(--btn-edit-hover);
+}
+
+.btn-save {
+  background: var(--btn-start);
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+}
+.btn-save:hover:not(:disabled) {
+  background: var(--btn-start-hover);
+}
+
+/* ---------- Modal ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--modal-overlay-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal {
+  background: var(--modal-bg);
+  border-radius: 24px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+  transform: translateY(16px) scale(0.97);
+  transition: transform 0.25s ease;
+}
+
+.modal-overlay.active .modal {
+  transform: translateY(0) scale(1);
+}
+
+.modal-icon {
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+}
+
+.modal h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.modal p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid var(--input-border);
+  border-radius: var(--radius-input);
+  font-family: inherit;
+  font-size: 0.95rem;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  outline: none;
+  margin-bottom: 16px;
+  transition: border-color var(--transition), background var(--transition);
+  text-align: center;
+}
+
+.modal-input:focus {
+  border-color: var(--input-focus-border);
+}
+
+/* ================================================
+   RESPONSIVE BREAKPOINTS
+   xs  : < 480px   — small phones (iPhone SE, Galaxy A)
+   sm  : 480–767px — large phones / phablets
+   md  : 768–1023px — tablets (iPad, Surface)
+   lg  : 1024px+   — desktop (default styles above)
+   ================================================ */
+
+/* -----------------------------------------------
+   md — Tablets (768px – 1023px)
+   Middle row stays 2-col but shrinks gracefully.
+   Bottom row collapses to 1 col.
+   ----------------------------------------------- */
+@media (max-width: 1023px) {
+  .dashboard {
+    max-width: 760px;
+    padding: 28px 20px 40px;
+  }
+
+  .bottom-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* -----------------------------------------------
+   sm — Large phones / phablets (480px – 767px)
+   Both rows go single-column.
+   Font sizes scale down a notch.
+   ----------------------------------------------- */
+@media (max-width: 767px) {
+  .dashboard {
+    padding: 20px 16px 36px;
+    gap: 16px;
+  }
+
+  /* Both grid rows → single column */
+  .middle-row,
+  .bottom-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Cards */
+  .card {
+    padding: 22px 20px;
+    border-radius: 16px;
+  }
+
+/* Konten utama */
+
+  /* Greeting */
+  .greeting-card {
+    padding: 28px 20px;
+  }
+
+  .time-display {
+    font-size: 2.8rem;
+    letter-spacing: 1px;
+  }
+
+  .date-display {
+    font-size: 0.88rem;
+  }
+
+  .greeting-text {
+    font-size: 1.25rem;
+  }
+
+  /* Timer */
+  .timer-card {
+    /* horizontal layout on sm: controls left, display right */
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .timer-card .card-title {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .timer-duration-row {
+    margin-bottom: 0;
+    flex: 1;
+    min-width: 150px;
+  }
+
+  .timer-display {
+    font-size: 2.8rem;
+    letter-spacing: 2px;
+    flex: 1;
+    text-align: right;
+    min-width: 120px;
+  }
+
+  .timer-status {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .timer-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Tasks — cap list height for phones */
+  .task-list {
+    max-height: 220px;
+  }
+
+  /* Link inputs — stack vertically */
+  .link-input-row {
+    flex-direction: column;
+  }
+
+  .link-input,
+  .link-input-url {
+    width: 100%;
+    min-width: unset;
+  }
+
+  /* Toggle */
+  .theme-toggle {
+    top: 12px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+  }
+
+  /* Modal */
+  .modal {
+    max-width: 92vw;
+    padding: 32px 24px;
+  }
+}
+
+/* -----------------------------------------------
+   xs — Small phones (< 480px)
+   Tighter spacing, larger touch targets, smaller
+   font sizes, full-width timer buttons.
+   ----------------------------------------------- */
+@media (max-width: 479px) {
+  .dashboard {
+    padding: 14px 12px 28px;
+    gap: 12px;
+  }
+
+  /* Cards */
+  .card {
+    padding: 18px 14px;
+    border-radius: 14px;
+  }
+
+  .greeting-card {
+    padding: 22px 14px;
+  }
+
+  /* Greeting */
+  .time-display {
+    font-size: 2.4rem;
+  }
+
+  .greeting-text {
+    font-size: 1.1rem;
+  }
+
+  .date-display {
+    font-size: 0.82rem;
+  }
+
+  /* Timer — revert to stacked column on tiny screens */
+  .timer-card {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .timer-duration-row {
+    flex: unset;
+    min-width: unset;
+    justify-content: center;
+  }
+
+  .timer-display {
+    font-size: 3rem;
+    text-align: center;
+    flex: unset;
+    min-width: unset;
+  }
+
+  /* Buttons — minimum 44px tall for touch */
+  .btn {
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    min-height: 44px;
+  }
+
+  .btn-danger,
+  .btn-edit,
+  .btn-save {
+    padding: 8px 10px;
+    font-size: 0.75rem;
+    min-height: 36px;
+  }
+
+  /* Timer buttons fill width on small screens */
+  .timer-buttons {
+    gap: 8px;
+  }
+
+  .timer-buttons .btn {
+    flex: 1;
+    text-align: center;
+  }
+
+  /* Task input row — stack Add button below on very small phones */
+  .task-input-row {
+    flex-wrap: wrap;
+  }
+
+  .task-input {
+    flex-basis: 100%;
+  }
+
+  .task-input-row .btn {
+    flex: 1;
+  }
+
+  /* Reduce scrollable list height */
+  .task-list {
+    max-height: 180px;
+  }
+
+  /* Card title smaller */
+  .card-title {
+    font-size: 0.95rem;
+  }
+
+  /* Toggle sits inline with content rather than overlapping */
+  .theme-toggle {
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+
+  /* Modal */
+  .modal {
+    padding: 28px 18px;
+    border-radius: 18px;
+  }
+
+  .modal-icon {
+    font-size: 2.2rem;
+  }
+
+  .modal h2 {
+    font-size: 1.2rem;
+  }
+
+  /* Dashboard top padding so toggle doesn't overlap clock */
+  .dashboard {
+    padding-top: 64px;
+  }
+}
+
+/* -----------------------------------------------
+   Landscape phones — keep cards compact in height
+   so everything fits without scrolling.
+   ----------------------------------------------- */
+@media (max-width: 767px) and (orientation: landscape) {
+  .dashboard {
+    padding-top: 16px;
+    gap: 12px;
+  }
+
+  .greeting-card {
+    padding: 16px 20px;
+  }
+
+  .time-display {
+    font-size: 2rem;
+  }
+
+  .greeting-text {
+    font-size: 1rem;
+    margin-top: 4px;
+  }
+
+  .timer-display {
+    font-size: 2.2rem;
+  }
+
+  .card {
+    padding: 16px 18px;
+  }
+
+  .task-list {
+    max-height: 150px;
+  }
+}
